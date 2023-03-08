@@ -41,9 +41,9 @@ namespace Data
         /// <summary>
         /// Consulta los productos por nombre
         /// </summary>
-        /// <param name="findProductsByName"></param>
+        /// <param name="productName"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        public GeneralRequest<List<Products>> SelectProductsByProductName(FindProductsByName findProductsByName)
+        public GeneralRequest<List<Products>> SelectProductsByProductName(string productName)
         {
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
@@ -51,18 +51,7 @@ namespace Data
                 using (var ctx = new ComercializadoraDbEntities1())
                 {
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    generalRequest.Result = ctx.Products.Where(x => x.ProductName == findProductsByName.ProductName).ToList();
-                    if (findProductsByName.OrderByDescription)
-                    {
-                        if (findProductsByName.DescriptionAscending)
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductDescription).ToList();
-                        }
-                        else
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductDescription).ToList();
-                        }
-                    }
+                    generalRequest.Result = ctx.Products.Where(x => x.ProductName == productName).ToList();
                 }
             }
             catch (Exception e)
@@ -77,9 +66,9 @@ namespace Data
         /// <summary>
         /// Consulta los productos por descripcion
         /// </summary>
-        /// <param name="findProductsByDescription"></param>
+        /// <param name="productDescription"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        public GeneralRequest<List<Products>> SelectProductsByProductDescription(FindProductsByDescription findProductsByDescription)
+        public GeneralRequest<List<Products>> SelectProductsByProductDescription(string productDescription)
         {
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
@@ -87,18 +76,7 @@ namespace Data
                 using (var ctx = new ComercializadoraDbEntities1())
                 {
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    generalRequest.Result = ctx.Products.Where(x => x.ProductDescription == findProductsByDescription.ProductDescription).ToList();
-                    if (findProductsByDescription.OrderByName)
-                    {
-                        if (findProductsByDescription.NameAscending)
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductName).ToList();
-                        }
-                        else
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductName).ToList();
-                        }
-                    }
+                    generalRequest.Result = ctx.Products.Where(x => x.ProductDescription == productDescription).ToList();
                 }
             }
             catch (Exception e)
@@ -113,9 +91,9 @@ namespace Data
         /// <summary>
         /// Consulta los productos por categorias
         /// </summary>
-        /// <param name="findProductsByCategory"></param>
+        /// <param name="categoryId"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        public GeneralRequest<List<Products>> SelectProductsByCategory(FindProductsByCategory findProductsByCategory)
+        public GeneralRequest<List<Products>> SelectProductsByCategory(int categoryId)
         {
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
@@ -123,30 +101,7 @@ namespace Data
                 using (var ctx = new ComercializadoraDbEntities1())
                 {
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    generalRequest.Result = ctx.Products.Where(x => x.CategoryId == findProductsByCategory.CategoryId).ToList();
-                    if (findProductsByCategory.OrderByName)
-                    {
-                        if (findProductsByCategory.NameAscending)
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductName).ToList();
-                        }
-                        else
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductName).ToList();
-                        }
-                    }
-
-                    if (findProductsByCategory.OrderByDescription)
-                    {
-                        if (findProductsByCategory.DescriptionAscending)
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductDescription).ToList();
-                        }
-                        else
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductDescription).ToList();
-                        }
-                    }
+                    generalRequest.Result = ctx.Products.Where(x => x.CategoryId == categoryId).ToList();
                 }
             }
             catch (Exception e)
@@ -162,7 +117,7 @@ namespace Data
         /// Consulta todos los productos
         /// </summary>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        public GeneralRequest<List<Products>> SelectProducts(FindAllProducts findAllProducts)
+        public GeneralRequest<List<Products>> SelectProducts()
         {
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
@@ -171,29 +126,6 @@ namespace Data
                 {
                     ctx.Configuration.ProxyCreationEnabled = false;
                     generalRequest.Result = ctx.Products.Select(x => x).ToList();
-                    if (findAllProducts.OrderByName)
-                    {
-                        if (findAllProducts.NameAscending)
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductName).ToList();
-                        }
-                        else
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductName).ToList();
-                        }
-                    }
-
-                    if (findAllProducts.OrderByDescription)
-                    {
-                        if (findAllProducts.DescriptionAscending)
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductDescription).ToList();
-                        }
-                        else
-                        {
-                            generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductDescription).ToList();
-                        }
-                    }
                 }
             }
             catch (Exception e)
@@ -282,6 +214,58 @@ namespace Data
                     var productToDelete = ctx.Products.Where(x => x.ProductId == productId).FirstOrDefault();
                     ctx.Products.Remove(productToDelete);
                     ctx.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                generalRequest.Exception = JsonConvert.SerializeObject(e);
+                generalRequest.Message = e.Message;
+                generalRequest.Error = true;
+                generalRequest.Result = false;
+            }
+            return generalRequest;
+        }
+
+        /// <summary>
+        /// Borrado de todos los productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        public GeneralRequest<bool> DeleteAllProducts()
+        {
+            GeneralRequest<bool> generalRequest = new GeneralRequest<bool>();
+            generalRequest.Result = true;
+            try
+            {
+                using (var ctx = new ComercializadoraDbEntities1())
+                {
+                    ctx.Configuration.ProxyCreationEnabled = false;
+                    ctx.sp_DeleteAllProducts();
+                }
+            }
+            catch (Exception e)
+            {
+                generalRequest.Exception = JsonConvert.SerializeObject(e);
+                generalRequest.Message = e.Message;
+                generalRequest.Error = true;
+                generalRequest.Result = false;
+            }
+            return generalRequest;
+        }
+
+        /// <summary>
+        /// Agregado de 100000 productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        public GeneralRequest<bool> AddMassiveProducts()
+        {
+            GeneralRequest<bool> generalRequest = new GeneralRequest<bool>();
+            generalRequest.Result = true;
+            try
+            {
+                using (var ctx = new ComercializadoraDbEntities1())
+                {
+                    ctx.Configuration.ProxyCreationEnabled = false;
+                    ctx.sp_CreateMassiveProducts();
                 }
             }
             catch (Exception e)

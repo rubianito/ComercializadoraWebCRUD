@@ -5,6 +5,7 @@ using Domain.Requests;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Business
 {
@@ -57,7 +58,19 @@ namespace Business
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
             {
-                generalRequest = _productsDat.SelectProductsByProductName(findProductsByName);
+                generalRequest = _productsDat.SelectProductsByProductName(findProductsByName.ProductName);
+
+                if (findProductsByName.OrderByDescription)
+                {
+                    if (findProductsByName.DescriptionAscending)
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductDescription).ToList();
+                    }
+                    else
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductDescription).ToList();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -78,7 +91,18 @@ namespace Business
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
             {
-                generalRequest = _productsDat.SelectProductsByProductDescription(findProductsByDescription);
+                generalRequest = _productsDat.SelectProductsByProductDescription(findProductsByDescription.ProductDescription);
+                if (findProductsByDescription.OrderByName)
+                {
+                    if (findProductsByDescription.NameAscending)
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductName).ToList();
+                    }
+                    else
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductName).ToList();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -99,7 +123,30 @@ namespace Business
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
             {
-                generalRequest = _productsDat.SelectProductsByCategory(findProductsByCategory);
+                generalRequest = _productsDat.SelectProductsByCategory(findProductsByCategory.CategoryId);
+                if (findProductsByCategory.OrderByName)
+                {
+                    if (findProductsByCategory.NameAscending)
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductName).ToList();
+                    }
+                    else
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductName).ToList();
+                    }
+                }
+
+                if (findProductsByCategory.OrderByDescription)
+                {
+                    if (findProductsByCategory.DescriptionAscending)
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductDescription).ToList();
+                    }
+                    else
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductDescription).ToList();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -119,7 +166,30 @@ namespace Business
             GeneralRequest<List<Products>> generalRequest = new GeneralRequest<List<Products>>();
             try
             {
-                generalRequest = _productsDat.SelectProducts(findAllProducts);
+                generalRequest = _productsDat.SelectProducts();
+                if (findAllProducts.OrderByName)
+                {
+                    if (findAllProducts.NameAscending)
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductName).ToList();
+                    }
+                    else
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductName).ToList();
+                    }
+                }
+
+                if (findAllProducts.OrderByDescription)
+                {
+                    if (findAllProducts.DescriptionAscending)
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderBy(x => x.ProductDescription).ToList();
+                    }
+                    else
+                    {
+                        generalRequest.Result = generalRequest.Result.OrderByDescending(x => x.ProductDescription).ToList();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -180,6 +250,46 @@ namespace Business
             try
             {
                 generalRequest = _productsDat.DeleteProduct(productId);
+            }
+            catch (Exception e)
+            {
+                generalRequest.Exception = JsonConvert.SerializeObject(e);
+                generalRequest.Message = e.Message;
+                generalRequest.Error = true;
+            }
+            return generalRequest;
+        }
+
+        /// <summary>
+        /// Borrado de todos los productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        public GeneralRequest<bool> DeleteAllProducts()
+        {
+            GeneralRequest<bool> generalRequest = new GeneralRequest<bool>();
+            try
+            {
+                generalRequest = _productsDat.DeleteAllProducts();
+            }
+            catch (Exception e)
+            {
+                generalRequest.Exception = JsonConvert.SerializeObject(e);
+                generalRequest.Message = e.Message;
+                generalRequest.Error = true;
+            }
+            return generalRequest;
+        }
+
+        /// <summary>
+        /// Agregado de 100000 productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        public GeneralRequest<bool> AddMassiveProducts()
+        {
+            GeneralRequest<bool> generalRequest = new GeneralRequest<bool>();
+            try
+            {
+                generalRequest = _productsDat.AddMassiveProducts();
             }
             catch (Exception e)
             {

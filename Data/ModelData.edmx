@@ -34,6 +34,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_CreateMassiveProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_DeleteAllProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ComercializadoraDbModelStoreContainer">
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
@@ -53,6 +55,8 @@
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
+          <FunctionImport Name="sp_CreateMassiveProducts" />
+          <FunctionImport Name="sp_DeleteAllProducts" />
         </EntityContainer>
         <EntityType Name="Categories">
           <Key>
@@ -110,6 +114,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_CreateMassiveProducts" FunctionName="ComercializadoraDbModel.Store.sp_CreateMassiveProducts" />
+          <FunctionImportMapping FunctionImportName="sp_DeleteAllProducts" FunctionName="ComercializadoraDbModel.Store.sp_DeleteAllProducts" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

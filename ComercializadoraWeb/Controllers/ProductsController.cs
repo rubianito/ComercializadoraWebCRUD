@@ -109,5 +109,29 @@ namespace ComercializadoraWeb.Controllers
             ProductsBss productsBss = new ProductsBss();
             return Json(productsBss.DeleteProduct(productId), JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Borrado de todos los productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        [HttpPost]
+        [Route("[action]")]
+        public JsonResult DeleteAllProducts()
+        {
+            ProductsBss productsBss = new ProductsBss();
+            return Json(productsBss.DeleteAllProducts(), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Agregado de 100000 productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        [HttpPost]
+        [Route("[action]")]
+        public JsonResult AddMassiveProducts()
+        {
+            ProductsBss productsBss = new ProductsBss();
+            return Json(productsBss.AddMassiveProducts(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

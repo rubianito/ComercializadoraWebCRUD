@@ -13,6 +13,8 @@ namespace Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class ComercializadoraDbEntities1 : DbContext
     {
@@ -28,5 +30,15 @@ namespace Data
     
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Products> Products { get; set; }
+    
+        public virtual int sp_CreateMassiveProducts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_CreateMassiveProducts");
+        }
+    
+        public virtual int sp_DeleteAllProducts()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_DeleteAllProducts");
+        }
     }
 }

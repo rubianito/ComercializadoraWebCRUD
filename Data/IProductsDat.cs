@@ -17,29 +17,29 @@ namespace Data
         /// <summary>
         /// Consulta los productos por nombre
         /// </summary>
-        /// <param name="findProductsByName"></param>
+        /// <param name="productName"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        GeneralRequest<List<Products>> SelectProductsByProductName(FindProductsByName findProductsByName);
+        GeneralRequest<List<Products>> SelectProductsByProductName(string productName);
 
         /// <summary>
         /// Consulta los productos por descripcion
         /// </summary>
-        /// <param name="findProductsByDescription"></param>
+        /// <param name="productDescription"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        GeneralRequest<List<Products>> SelectProductsByProductDescription(FindProductsByDescription findProductsByDescription);
+        GeneralRequest<List<Products>> SelectProductsByProductDescription(string productDescription);
 
         /// <summary>
         /// Consulta los productos por categorias
         /// </summary>
-        /// <param name="findProductsByCategory"></param>
+        /// <param name="catetoryId"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        GeneralRequest<List<Products>> SelectProductsByCategory(FindProductsByCategory findProductsByCategory);
+        GeneralRequest<List<Products>> SelectProductsByCategory(int catetoryId);
 
         /// <summary>
         /// Consulta todos los productos
         /// </summary>
         /// <returns>Objeto generico para manejo de excepciones</returns>
-        GeneralRequest<List<Products>> SelectProducts(FindAllProducts findAllProducts);
+        GeneralRequest<List<Products>> SelectProducts();
 
         /// <summary>
         /// Agrega producto a la base de datos
@@ -61,5 +61,17 @@ namespace Data
         /// <param name="productId"></param>
         /// <returns>Objeto generico para manejo de excepciones</returns>
         GeneralRequest<bool> DeleteProduct(int productId);
+
+        /// <summary>
+        /// Borrado de todos los productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        GeneralRequest<bool> DeleteAllProducts();
+
+        /// <summary>
+        /// Agregado de 100000 productos
+        /// </summary>
+        /// <returns>Objeto generico para manejo de excepciones</returns>
+        GeneralRequest<bool> AddMassiveProducts();
     }
 }
